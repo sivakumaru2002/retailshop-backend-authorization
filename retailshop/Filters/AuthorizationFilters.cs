@@ -8,26 +8,29 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 namespace retailshop.Filters
 {
     public class AuthorizationFilters : Attribute, IAuthorizationFilter
     {
-
-        public void resource(HttpContext httpContextAccessor)
-        {
-            var userService = httpContextAccessor.RequestServices.GetRequiredService(typeof(IUserCheck)) as IUserCheck;
-            var user = httpContextAccessor.User;
+        public readonly IUserCheck userCheck;
+        public AuthorizationFilters(IUserCheck userCheck) {
+            this.userCheck = userCheck;    
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            bool isAuth = AuthorizationLogic(context.HttpContext.User);
+            bool isAuth = AuthorizationLogic(context.HttpContext);
             if (!isAuth) { context.Result = new UnauthorizedObjectResult("UnAuthorized"); }
         }
 
 
-        private bool AuthorizationLogic(System.Security.Claims.ClaimsPrincipal user)
+        private bool AuthorizationLogic(HttpContext context)
         {
-            if (user.Identity.Name=="Srinidhi") return true;
+            var userName = context.User.Claims.FirstOrDefault().Value;
+            var userMail=context.User.FindFirstValue(ClaimTypes.Email);
+            var userpassword = context.User.Claims.First(c => c.Type == "Sub").Value;
+
+            if (userCheck.CheckUser(userName,userMail)) return true;
             return false;
         }
 

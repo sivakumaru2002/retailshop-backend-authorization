@@ -19,7 +19,7 @@ namespace retailshop.Controllers
         }
         [HttpGet]
         [Route ("GetAllproduct")]
-        [AuthorizationFilters]
+        [ServiceFilter(typeof(AuthorizationFilters))]
         public async Task<IActionResult> GetAllProduct()
         {
             if (_DbContext.Cart == null)

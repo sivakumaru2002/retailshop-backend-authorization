@@ -2,7 +2,7 @@
 {
     public interface IUserCheck
     {
-            bool CheckUser(string username);
+            bool CheckUser(string username,string mail);
 
     }
 }

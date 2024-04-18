@@ -12,14 +12,14 @@ namespace retailshop.Controllers
             _appDbContext = appDbContext;
         }
 
-        public bool CheckUser(string user)
+        public bool CheckUser(string user,string? mail)
         {
             if (user == null)
             {
                 return false;
             }
 
-            var exists = _appDbContext.UserModel.Any(u => u.Username == user);
+            var exists = _appDbContext.UserModel.Any(u => u.Username == user&&u.EmailAddress==mail);
             return exists;
         }
     }

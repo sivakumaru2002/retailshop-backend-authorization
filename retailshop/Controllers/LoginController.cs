@@ -47,7 +47,7 @@ namespace JWTAuthentication.Controllers
             var claims = new[] {
         new Claim(JwtRegisteredClaimNames.Name, userInfo.Username),
         new Claim(JwtRegisteredClaimNames.Email, userInfo.EmailAddress),
-        new Claim(JwtRegisteredClaimNames.Sub,userInfo.Password),
+        new Claim("Sub",userInfo.Password),
         new Claim("DateOfJoing", userInfo.DateOfJoing),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
     };
